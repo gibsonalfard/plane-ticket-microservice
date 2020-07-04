@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2020 at 09:10 PM
+-- Generation Time: Jul 04, 2020 at 09:31 PM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -83,6 +83,7 @@ CREATE TABLE `provider` (
 CREATE TABLE `ticket` (
   `ticket_id` int(11) NOT NULL,
   `destination` varchar(255) DEFAULT NULL,
+  `flight_date` date DEFAULT NULL,
   `origin` varchar(255) DEFAULT NULL,
   `price` double NOT NULL,
   `stock` int(11) NOT NULL,

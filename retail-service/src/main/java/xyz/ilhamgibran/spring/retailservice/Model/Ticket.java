@@ -1,6 +1,7 @@
 package xyz.ilhamgibran.spring.retailservice.Model;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class Ticket {
@@ -11,6 +12,7 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "providerId")
     private Provider providerId;
+    private Date flightDate;
     private String origin;
     private String destination;
     private double price;
@@ -62,5 +64,13 @@ public class Ticket {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public Date getFlightDate() {
+        return flightDate;
+    }
+
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
     }
 }
