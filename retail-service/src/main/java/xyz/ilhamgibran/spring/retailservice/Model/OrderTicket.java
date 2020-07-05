@@ -15,6 +15,7 @@ public class OrderTicket {
     @ManyToOne
     @JoinColumn(name = "seatId")
     private TicketSeat ticket;
+    private String passagerName;
 
     public int getOrderTickerId() {
         return orderTickerId;

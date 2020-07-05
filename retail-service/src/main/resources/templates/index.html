@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Form</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        .row{
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <form method="POST" action="save">
+            <div class="row">
+                <div class="col-sm-5" th:object="${city}">
+                    <label for="fromCombo">FROM</label>
+                    <select class="form-control" id="fromCombo" name="fromCombo">
+                        <option value="0">------- PILIH KOTA ASAL -------</option>
+                        <option th:each="city : ${city}"
+                                th:value="${city.cityId}"
+                                th:text="${city.cityName}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-5" th:object="${city}">
+                    <label for="toCombo" >TO</label>
+                    <select class="form-control" name="toCombo" id="toCombo">
+                        <option value="0">------ PILIH KOTA TUJUAN ------</option>
+                        <option th:each="city : ${city}"
+                                th:value="${city.cityId}"
+                                th:text="${city.cityName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-5">
+                    <label for="flightClass">FLIGHT CLASS</label>
+                    <select class="form-control" name="flightClass" id="flightClass">
+                        <option value="0">---- PILIH Kelas Penerbangan ----</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <label for="flightClass">PASSANGER</label>
+                        <div class="row">
+
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input class="form-control" name="adultPass" aria-describedby="Passanger">
+                                    <span class="input-group-addon" id="passager1">Adult</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input class="form-control" name="kidsPass" aria-describedby="Passanger">
+                                    <span class="input-group-addon" id="passager2">Child</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 pull-right">
+                    <input type="submit" class="btn btn-primary" value="ORDER">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+</body>
+</html>
