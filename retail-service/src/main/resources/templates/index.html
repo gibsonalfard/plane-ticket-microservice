@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <form method="POST" action="save">
+        <form method="post" th:action="@{save}" th:object="${ticket}">
             <div class="row">
                 <div class="col-sm-5" th:object="${city}">
                     <label for="fromCombo">FROM</label>
@@ -27,7 +27,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-sm-5" th:object="${city}">
+                <div class="col-sm-5" th:field="*{destination}">
                     <label for="toCombo" >TO</label>
                     <select class="form-control" name="toCombo" id="toCombo">
                         <option value="0">------ PILIH KOTA TUJUAN ------</option>
@@ -40,10 +40,14 @@
             </div>
             <div class="row">
 
-                <div class="col-sm-5">
+                <div class="col-sm-5" th:object="${flighClass}">
                     <label for="flightClass">FLIGHT CLASS</label>
                     <select class="form-control" name="flightClass" id="flightClass">
                         <option value="0">---- PILIH Kelas Penerbangan ----</option>
+                        <option th:each="seatCls : ${flightClass}"
+                                th:value="${seatCls.classId}"
+                                th:text="${seatCls.className}">
+                        </option>
                     </select>
                 </div>
 

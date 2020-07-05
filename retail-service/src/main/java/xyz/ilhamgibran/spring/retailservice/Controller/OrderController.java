@@ -3,11 +3,10 @@ package xyz.ilhamgibran.spring.retailservice.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import xyz.ilhamgibran.spring.retailservice.Model.City;
 import xyz.ilhamgibran.spring.retailservice.Model.SeatClass;
+import xyz.ilhamgibran.spring.retailservice.Model.Ticket;
 import xyz.ilhamgibran.spring.retailservice.Repository.CityRepository;
 import xyz.ilhamgibran.spring.retailservice.Repository.SeatClassRepository;
 
@@ -21,17 +20,22 @@ public class OrderController {
     @Autowired
     private CityRepository cityRepository;
 
-    @GetMapping(name = "/")
+    @GetMapping(path = "/")
     public String showOrderForm(Model model){
         List<City> cityList = (List) cityRepository.findAll();
-//        model.addAttribute("flightClass", seatClassRepository);
+        List<SeatClass> seatClasses = (List) seatClassRepository.findAll();
+
+        model.addAttribute("ticket", new Ticket());
+        model.addAttribute("flightClass", seatClasses);
         model.addAttribute("city", cityList);
         return "index";
     }
 
-    @RequestMapping(name = "/save", method = RequestMethod.POST)
-    public String saveOrder(Model model){
-        System.out.println(model);
+    @PostMapping(path = "/save")
+    public String saveOrder(@ModelAttribute Ticket ticket, Model model){
+        Ticket tiket = (Ticket) model.getAttribute("ticket");
+        System.out.println("This is Ticket : "+ tiket.getDestination());
+        System.out.println("This is Ticket-Ticket : "+ ticket.getDestination());
         return "saved";
     }
 }
