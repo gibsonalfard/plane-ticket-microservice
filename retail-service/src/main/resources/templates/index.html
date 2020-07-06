@@ -24,7 +24,11 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <form method="post" th:action="@{save}" th:object="${input}">
+        <h2>Order Form</h2>
+        <div class="alert alert-danger" role="alert" th:if="${status == 1}">
+            Data Not Found
+        </div>
+        <form method="post" action="#" th:object="${input}">
             <div class="row">
                 <div class="col-sm-5">
                     <label for="fromCombo">FROM</label>

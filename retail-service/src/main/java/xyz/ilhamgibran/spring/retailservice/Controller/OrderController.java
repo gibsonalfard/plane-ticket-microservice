@@ -37,10 +37,11 @@ public class OrderController {
         model.addAttribute("input", new InputFormOrder());
         model.addAttribute("flightClass", seatClasses);
         model.addAttribute("city", cityList);
+        model.addAttribute("status", 0);
         return "index";
     }
 
-    @PostMapping(path = "/save")
+    @PostMapping(path = "/")
     public String saveOrder(@ModelAttribute InputFormOrder input, Model model){
         City destCity = cityRepository.getCityById(input.getDestination());
         City origCity = cityRepository.getCityById(input.getOrigin());
@@ -50,10 +51,17 @@ public class OrderController {
                 ,input.getOrigin(),input.getDestination(), input.getFlightClass());
 
         if(ticket == null){
-            System.out.println("Origin City is : " + origCity.getCityName());
-            System.out.println("Destination City is : " + destCity.getCityName());
-            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
-            System.out.println("Flight Class City is : " + seatClass.getClassName());
+            List<City> cityList = (List) cityRepository.findAll();
+            List<SeatClass> seatClasses = (List) seatClassRepository.findAll();
+//            System.out.println("Origin City is : " + origCity.getCityName());
+//            System.out.println("Destination City is : " + destCity.getCityName());
+//            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
+//            System.out.println("Flight Class City is : " + seatClass.getClassName());
+            model.addAttribute("input", new InputFormOrder());
+            model.addAttribute("flightClass", seatClasses);
+            model.addAttribute("city", cityList);
+            model.addAttribute("status", 1);
+            return "index";
         }else{
             System.out.println("Origin City is : " + ticket.getOrigin().getCityName());
             System.out.println("Destination City is : " + ticket.getDestination().getCityName());
