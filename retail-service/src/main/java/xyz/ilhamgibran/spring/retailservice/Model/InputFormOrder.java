@@ -4,6 +4,7 @@ public class InputFormOrder {
     private int origin;
     private int destination;
     private int flightClass;
+    private String departureDate;
     private int adultPass;
     private int childPass;
 
@@ -45,5 +46,23 @@ public class InputFormOrder {
 
     public void setChildPass(int childPass) {
         this.childPass = childPass;
+    }
+
+    public String getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(String departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public String getDepartureDateSQLFormat(){
+        String day = getDepartureDate().substring(0,2);
+        String month = getDepartureDate().substring(3,5);
+        String year = getDepartureDate().substring(6,10);
+
+        String departure = year + "-" + month + "-" + day;
+
+        return departure;
     }
 }

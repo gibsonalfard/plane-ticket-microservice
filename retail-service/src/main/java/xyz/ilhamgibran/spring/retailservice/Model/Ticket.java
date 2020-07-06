@@ -15,12 +15,17 @@ public class Ticket {
     private Date flightDate;
 
     @ManyToOne
-    @JoinColumn(name = "cityId", insertable = false, updatable = false)
+    @JoinColumn(name = "origin")
     private City origin;
+//    , insertable = false, updatable = true
+    @ManyToOne
+    @JoinColumn(name = "destination")
+    private City destination;
 
     @ManyToOne
-    @JoinColumn(name = "cityId", insertable = false, updatable = false)
-    private City destination;
+    @JoinColumn(name = "seatClass")
+    private SeatClass seatClass;
+
     private double price;
     private int stock;
 
@@ -78,5 +83,13 @@ public class Ticket {
 
     public void setDestination(City destination) {
         this.destination = destination;
+    }
+
+    public SeatClass getSeatClass() {
+        return seatClass;
+    }
+
+    public void setSeatClass(SeatClass seatClass) {
+        this.seatClass = seatClass;
     }
 }

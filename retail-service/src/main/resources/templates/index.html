@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <title>Order Form</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+
+    <script src="js/jquery-3.5.1.slim.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker();
+        });
+    </script>
     <style>
         .row{
             margin-bottom: 10px;
@@ -38,7 +47,19 @@
                     </select>
                 </div>
             </div>
+
             <div class="row">
+                <div class='col-sm-5'>
+                    <div class="form-group">
+                        <label for="toCombo">DEPARTURE DATE</label>
+                        <div class="input-group date datepicker" data-provide="datepicker">
+                            <input type="text" class="form-control" readonly th:field="*{departureDate}">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-sm-5">
                     <label for="flightClass">FLIGHT CLASS</label>
@@ -50,31 +71,32 @@
                         </option>
                     </select>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-sm-5">
-                        <label for="flightClass">PASSANGER</label>
-                        <div class="row">
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="flightClass">PASSANGER</label>
+                    <div class="row">
 
-                            <div class="col-sm-4">
-                                <div class="input-group">
-                                    <input class="form-control" name="adultPass"
-                                           aria-describedby="Passanger" th:field="*{adultPass}">
-                                    <span class="input-group-addon" id="passager1">Adult</span>
-                                </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input class="form-control" name="adultPass"
+                                       aria-describedby="Passanger" th:field="*{adultPass}">
+                                <span class="input-group-addon" id="passager1">Adult</span>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="input-group">
-                                    <input class="form-control" name="kidsPass"
-                                           aria-describedby="Passanger" th:field="*{childPass}">
-                                    <span class="input-group-addon" id="passager2">Child</span>
-                                </div>
-                            </div>
-
                         </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input class="form-control" name="kidsPass"
+                                       aria-describedby="Passanger" th:field="*{childPass}">
+                                <span class="input-group-addon" id="passager2">Child</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-sm-3 pull-right">
                     <input type="submit" class="btn btn-primary" value="ORDER">
