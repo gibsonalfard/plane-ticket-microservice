@@ -11,9 +11,10 @@ spring:
     name: retail-service
   jpa:
     hibernate:
-      ddl-auto: ${DDL_METHOD:update}
+      ddl-auto: ${DDL_METHOD:none}
   datasource:
-#    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/retail?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    initialization-mode: always
+    #    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/retail?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     url: jdbc:mysql://wisata-lembang.com:3306/u8128384_retail?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 #    username: ${MYSQL_USER:root}
     username: u8128384_retailadm
