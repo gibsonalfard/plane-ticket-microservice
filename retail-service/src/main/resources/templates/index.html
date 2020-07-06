@@ -15,11 +15,11 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <form method="post" th:action="@{save}" th:object="${ticket}">
+        <form method="post" th:action="@{save}" th:object="${input}">
             <div class="row">
-                <div class="col-sm-5" th:object="${city}">
+                <div class="col-sm-5">
                     <label for="fromCombo">FROM</label>
-                    <select class="form-control" id="fromCombo" name="fromCombo">
+                    <select class="form-control" id="fromCombo" name="fromCombo" th:field="*{origin}">
                         <option value="0">------- PILIH KOTA ASAL -------</option>
                         <option th:each="city : ${city}"
                                 th:value="${city.cityId}"
@@ -27,9 +27,9 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-sm-5" th:field="*{destination}">
+                <div class="col-sm-5">
                     <label for="toCombo" >TO</label>
-                    <select class="form-control" name="toCombo" id="toCombo">
+                    <select class="form-control" name="toCombo" id="toCombo" th:field="*{destination}">
                         <option value="0">------ PILIH KOTA TUJUAN ------</option>
                         <option th:each="city : ${city}"
                                 th:value="${city.cityId}"
@@ -40,9 +40,9 @@
             </div>
             <div class="row">
 
-                <div class="col-sm-5" th:object="${flighClass}">
+                <div class="col-sm-5">
                     <label for="flightClass">FLIGHT CLASS</label>
-                    <select class="form-control" name="flightClass" id="flightClass">
+                    <select class="form-control" name="flightClass" id="flightClass" th:field="*{flightClass}">
                         <option value="0">---- PILIH Kelas Penerbangan ----</option>
                         <option th:each="seatCls : ${flightClass}"
                                 th:value="${seatCls.classId}"
@@ -58,13 +58,15 @@
 
                             <div class="col-sm-4">
                                 <div class="input-group">
-                                    <input class="form-control" name="adultPass" aria-describedby="Passanger">
+                                    <input class="form-control" name="adultPass"
+                                           aria-describedby="Passanger" th:field="*{adultPass}">
                                     <span class="input-group-addon" id="passager1">Adult</span>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group">
-                                    <input class="form-control" name="kidsPass" aria-describedby="Passanger">
+                                    <input class="form-control" name="kidsPass"
+                                           aria-describedby="Passanger" th:field="*{childPass}">
                                     <span class="input-group-addon" id="passager2">Child</span>
                                 </div>
                             </div>
