@@ -14,6 +14,11 @@ public class Orders {
     private Date orderDate;
     private double amount;
 
+    public Orders(Date orderDate, double amount){
+        this.orderDate = orderDate;
+        this.amount = amount;
+    }
+
     public int getOrderId() {
         return orderId;
     }

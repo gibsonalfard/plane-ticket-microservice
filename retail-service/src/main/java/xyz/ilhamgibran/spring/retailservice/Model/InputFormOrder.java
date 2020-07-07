@@ -1,5 +1,7 @@
 package xyz.ilhamgibran.spring.retailservice.Model;
 
+import java.util.List;
+
 public class InputFormOrder {
     private int origin;
     private int destination;
@@ -7,6 +9,7 @@ public class InputFormOrder {
     private String departureDate;
     private int adultPass;
     private int childPass;
+    private List<String> passagerName;
 
     public int getOrigin() {
         return origin;
@@ -64,5 +67,13 @@ public class InputFormOrder {
         String departure = year + "-" + month + "-" + day;
 
         return departure;
+    }
+
+    public List<String> getPassagerName() {
+        return passagerName;
+    }
+
+    public void setPassagerName(List<String> passagerName) {
+        this.passagerName = passagerName;
     }
 }

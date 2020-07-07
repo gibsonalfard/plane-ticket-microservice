@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Saved</title>
+    <title>Post Order : Form</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="js/jquery-3.5.1.slim.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <style>
+        .row{
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+<div class="row">
+    <div class="col-md-8 col-md-push-3">
+        <h2>Input Name of Passager</h2>
+        <form method="POST" action="save" th:object="${input}">
 
+            <div class="row" th:each="nameList, itemStat : *{passagerName}">
+                <div class="col-sm-5">
+                    <label th:for="${nameList}">Passager Name</label>
+                    <input type="text" class="form-control" th:id="${nameList}"
+                           th:field="*{passagerName[__${itemStat.index}__]}"
+                           placeholder="Passager Name">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-5  pull-right">
+                    <input type="submit" class="btn btn-primary" value="ORDER">
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
 </body>
 </html>

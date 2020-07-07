@@ -4,19 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import xyz.ilhamgibran.spring.retailservice.Model.City;
-import xyz.ilhamgibran.spring.retailservice.Model.InputFormOrder;
-import xyz.ilhamgibran.spring.retailservice.Model.SeatClass;
-import xyz.ilhamgibran.spring.retailservice.Model.Ticket;
-import xyz.ilhamgibran.spring.retailservice.Repository.CityRepository;
-import xyz.ilhamgibran.spring.retailservice.Repository.SeatClassRepository;
-import xyz.ilhamgibran.spring.retailservice.Repository.TicketRepository;
+import xyz.ilhamgibran.spring.retailservice.Model.*;
+import xyz.ilhamgibran.spring.retailservice.Repository.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class OrderController {
@@ -28,6 +23,15 @@ public class OrderController {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private OrdersRepository ordersRepository;
+
+    @Autowired
+    private OrderTicketRepository orderTicketRepository;
+
+    @Autowired
+    private TicketSeatRepository ticketSeatRepository;
 
     @GetMapping(path = "/")
     public String showOrderForm(Model model){
@@ -63,13 +67,49 @@ public class OrderController {
             model.addAttribute("status", 1);
             return "index";
         }else{
-            System.out.println("Origin City is : " + ticket.getOrigin().getCityName());
-            System.out.println("Destination City is : " + ticket.getDestination().getCityName());
-            System.out.println("Flight Class City is : " + ticket.getSeatClass().getClassName());
-            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
-            System.out.println("Ticket available : " + ticket.getStock() + " Ticket");
-        }
+//            System.out.println("Origin City is : " + ticket.getOrigin().getCityName());
+//            System.out.println("Destination City is : " + ticket.getDestination().getCityName());
+//            System.out.println("Flight Class City is : " + ticket.getSeatClass().getClassName());
+//            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
+//            System.out.println("Ticket available : " + ticket.getStock() + " Ticket");
+            if(ticket.getStock() < input.getAdultPass()){
+                // Request ke Tetangga
+            }
+            List<String> listName = new ArrayList<>();
 
-        return "saved";
+            for(int i=0;i<input.getAdultPass();i++){listName.add("");}
+            input.setPassagerName(listName);
+
+            model.addAttribute("input", input);
+            return "saved";
+        }
+    }
+
+    @PostMapping(path = "/save")
+    public String getSaveName(@ModelAttribute InputFormOrder input){
+        System.out.println(input.getPassagerName().size());
+        System.out.println(input.getPassagerName().get(2));
+
+//        Ticket ticket = ticketRepository.searchAvailability(input.getDepartureDateSQLFormat()
+//                ,input.getOrigin(),input.getDestination(), input.getFlightClass());
+//        double amount = input.getAdultPass()*ticket.getPrice();
+//
+//        // Save Order
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//        java.sql.Date now = new Date(Calendar.getInstance().getTime().getTime());
+//        Orders myOrder = new Orders(now, amount);
+//        ordersRepository.save(myOrder);
+//
+//        // Save Order Ticket
+//        List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat();
+//        int idx = 0;
+//        for(String name : input.getPassagerName()){
+//            OrderTicket order = new OrderTicket(myOrder, seat.get(idx), name);
+//            idx += 1;
+//            orderTicketRepository.save(order);
+//            ticketSeatRepository.takeSeat(seat.get(idx).getSeatId());
+//        }
+
+        return "postOrder";
     }
 }

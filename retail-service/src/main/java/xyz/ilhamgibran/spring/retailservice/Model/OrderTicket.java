@@ -17,6 +17,12 @@ public class OrderTicket {
     private TicketSeat ticket;
     private String passagerName;
 
+    public OrderTicket(Orders order, TicketSeat ts, String passagerName){
+        this.order = order;
+        this.ticket = ts;
+        this.passagerName = passagerName;
+    }
+
     public int getOrderTickerId() {
         return orderTickerId;
     }
