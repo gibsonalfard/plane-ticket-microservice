@@ -44,7 +44,6 @@ public class OrderController {
         model.addAttribute("input", new InputFormOrder());
         model.addAttribute("flightClass", seatClasses);
         model.addAttribute("city", cityList);
-        model.addAttribute("status", 0);
         return "index";
     }
 
@@ -54,14 +53,24 @@ public class OrderController {
         City origCity = cityRepository.getCityById(input.getOrigin());
         SeatClass seatClass = seatClassRepository.getSeatClassById(input.getFlightClass());
 
+        List<City> cityList = (List) cityRepository.findAll();
+        List<SeatClass> seatClasses = (List) seatClassRepository.findAll();
+
+        if(input.getAdultPass() < input.getChildPass()){
+            model.addAttribute("input", new InputFormOrder());
+            model.addAttribute("flightClass", seatClasses);
+            model.addAttribute("city", cityList);
+            model.addAttribute("status"
+                    ,"Number of Adult Passager must be more than Kids Passager");
+            return "index";
+        }
+
         this.form = input;
 
         Ticket ticket = ticketRepository.searchAvailability(input.getDepartureDateSQLFormat()
                 ,input.getOrigin(),input.getDestination(), input.getFlightClass());
 
         if(ticket == null){
-            List<City> cityList = (List) cityRepository.findAll();
-            List<SeatClass> seatClasses = (List) seatClassRepository.findAll();
 
             System.out.println("Origin City is : " + origCity.getCityName());
             System.out.println("Destination City is : " + destCity.getCityName());
@@ -71,7 +80,7 @@ public class OrderController {
             model.addAttribute("input", new InputFormOrder());
             model.addAttribute("flightClass", seatClasses);
             model.addAttribute("city", cityList);
-            model.addAttribute("status", 1);
+            model.addAttribute("status", "Data Not Found");
             return "index";
         }else{
 //            System.out.println("Origin City is : " + ticket.getOrigin().getCityName());
@@ -117,7 +126,7 @@ public class OrderController {
             ordersRepository.save(myOrder);
 
             // Save Order Ticket
-            List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat();
+            List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat(ticket.getTicketId());
             int idx = 0;
             for(String name : input.getPassagerName()){
                 orderTicketRepository.save(new OrderTicket(myOrder, seat.get(idx), name));

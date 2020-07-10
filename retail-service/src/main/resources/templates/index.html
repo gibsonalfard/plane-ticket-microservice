@@ -25,8 +25,8 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h2>Order Form</h2>
-        <div class="alert alert-danger" role="alert" th:if="${status == 1}">
-            Data Not Found
+        <div class="alert alert-danger" role="alert"
+             th:if="${status != null}" th:text="${status}">
         </div>
         <form method="post" action="#" th:object="${input}">
             <div class="row">
