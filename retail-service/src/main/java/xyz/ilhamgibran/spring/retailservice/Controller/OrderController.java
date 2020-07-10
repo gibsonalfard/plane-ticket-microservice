@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.ilhamgibran.spring.retailservice.Model.*;
 import xyz.ilhamgibran.spring.retailservice.Repository.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class OrderController {
     @Autowired
     private TicketSeatRepository ticketSeatRepository;
 
+    InputFormOrder form = new InputFormOrder();
+
     @GetMapping(path = "/")
     public String showOrderForm(Model model){
         List<City> cityList = (List) cityRepository.findAll();
@@ -51,16 +54,20 @@ public class OrderController {
         City origCity = cityRepository.getCityById(input.getOrigin());
         SeatClass seatClass = seatClassRepository.getSeatClassById(input.getFlightClass());
 
+        this.form = input;
+
         Ticket ticket = ticketRepository.searchAvailability(input.getDepartureDateSQLFormat()
                 ,input.getOrigin(),input.getDestination(), input.getFlightClass());
 
         if(ticket == null){
             List<City> cityList = (List) cityRepository.findAll();
             List<SeatClass> seatClasses = (List) seatClassRepository.findAll();
-//            System.out.println("Origin City is : " + origCity.getCityName());
-//            System.out.println("Destination City is : " + destCity.getCityName());
-//            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
-//            System.out.println("Flight Class City is : " + seatClass.getClassName());
+
+            System.out.println("Origin City is : " + origCity.getCityName());
+            System.out.println("Destination City is : " + destCity.getCityName());
+            System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
+            System.out.println("Flight Class City is : " + seatClass.getClassName());
+
             model.addAttribute("input", new InputFormOrder());
             model.addAttribute("flightClass", seatClasses);
             model.addAttribute("city", cityList);
@@ -81,34 +88,47 @@ public class OrderController {
             input.setPassagerName(listName);
 
             model.addAttribute("input", input);
+            model.addAttribute("ticket", ticket);
             return "saved";
         }
     }
 
     @PostMapping(path = "/save")
-    public String getSaveName(@ModelAttribute InputFormOrder input){
-        System.out.println(input.getPassagerName().size());
-        System.out.println(input.getPassagerName().get(2));
+    public String getSaveName(@ModelAttribute InputFormOrder input, HttpServletResponse httpServletResponse){
+//        System.out.println(input.getPassagerName().size());
+//        System.out.println(input.getPassagerName().get(2));
+//        System.out.println(input.getOrigin() == 0 ? "NULL" : input.getOrigin());
+//        System.out.println(input.getDestination() == 0 ? "NULL" : input.getDestination());
+//        System.out.println(input.getDepartureDate() == null ? "NULL" : input.getDepartureDate());
 
-//        Ticket ticket = ticketRepository.searchAvailability(input.getDepartureDateSQLFormat()
-//                ,input.getOrigin(),input.getDestination(), input.getFlightClass());
-//        double amount = input.getAdultPass()*ticket.getPrice();
-//
-//        // Save Order
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//        java.sql.Date now = new Date(Calendar.getInstance().getTime().getTime());
-//        Orders myOrder = new Orders(now, amount);
-//        ordersRepository.save(myOrder);
-//
-//        // Save Order Ticket
-//        List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat();
-//        int idx = 0;
-//        for(String name : input.getPassagerName()){
-//            OrderTicket order = new OrderTicket(myOrder, seat.get(idx), name);
-//            idx += 1;
-//            orderTicketRepository.save(order);
-//            ticketSeatRepository.takeSeat(seat.get(idx).getSeatId());
-//        }
+        Ticket ticket = ticketRepository.searchAvailability(input.getDepartureDateSQLFormat()
+                ,input.getOrigin(),input.getDestination(), input.getFlightClass());
+
+        if(ticket == null){
+            httpServletResponse.setHeader("Location", "/");
+            httpServletResponse.setStatus(302);
+        }else{
+            double amount = input.getAdultPass()*ticket.getPrice();
+
+            // Save Order
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            java.sql.Date now = new Date(Calendar.getInstance().getTime().getTime());
+            Orders myOrder = new Orders(now, amount);
+            ordersRepository.save(myOrder);
+
+            // Save Order Ticket
+            List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat();
+            int idx = 0;
+            for(String name : input.getPassagerName()){
+                orderTicketRepository.save(new OrderTicket(myOrder, seat.get(idx), name));
+                seat.get(idx).setAvailability(0);
+                ticketSeatRepository.save(seat.get(idx));
+                idx += 1;
+            }
+
+            ticket.setStock(ticket.getStock()-input.getAdultPass());
+            ticketRepository.save(ticket);
+        }
 
         return "postOrder";
     }

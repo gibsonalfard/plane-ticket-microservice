@@ -19,6 +19,75 @@
     <div class="col-md-8 col-md-push-3">
         <h2>Input Name of Passager</h2>
         <form method="POST" action="save" th:object="${input}">
+<!--            <input type="hidden" th:field="*{departureDate}" th:value="*{departureDate}">-->
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="fromCombo">FROM</label>
+                    <select class="form-control" id="fromCombo" name="fromCombo" th:field="*{origin}" readonly>
+                        <option value="0">------- PILIH KOTA ASAL -------</option>
+                        <option th:value="${ticket.origin.cityId}"
+                                th:text="${ticket.origin.cityName}" selected>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-5">
+                    <label for="toCombo" >TO</label>
+                    <select class="form-control" name="toCombo" id="toCombo" th:field="*{destination}" readonly>
+                        <option value="0">------ PILIH KOTA TUJUAN ------</option>
+                        <option th:value="${ticket.destination.cityId}"
+                                th:text="${ticket.destination.cityName}" selected>
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class='col-sm-5'>
+                    <div class="form-group">
+                        <label for="toCombo">DEPARTURE DATE</label>
+                        <div class="input-group date datepicker" data-provide="datepicker">
+                            <input type="text" class="form-control" readonly th:field="*{departureDate}">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <label for="flightClass">FLIGHT CLASS</label>
+                    <select class="form-control" name="flightClass" id="flightClass" th:field="*{flightClass}" readonly>
+                        <option value="0">---- PILIH Kelas Penerbangan ----</option>
+                        <option th:value="${ticket.seatClass.classId}"
+                                th:text="${ticket.seatClass.className}" selected>
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="flightClass">PASSANGER</label>
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input class="form-control" name="adultPass"
+                                       aria-describedby="Passanger" th:field="*{adultPass}" readonly>
+                                <span class="input-group-addon" id="passager1">Adult</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input class="form-control" name="kidsPass"
+                                       aria-describedby="Passanger" th:field="*{childPass}" readonly>
+                                <span class="input-group-addon" id="passager2">Child</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <div class="row" th:each="nameList, itemStat : *{passagerName}">
                 <div class="col-sm-5">

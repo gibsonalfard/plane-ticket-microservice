@@ -1,5 +1,9 @@
 package xyz.ilhamgibran.spring.retailservice.Model;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import java.util.List;
 
 public class InputFormOrder {
@@ -60,8 +64,8 @@ public class InputFormOrder {
     }
 
     public String getDepartureDateSQLFormat(){
-        String day = getDepartureDate().substring(0,2);
-        String month = getDepartureDate().substring(3,5);
+        String month = getDepartureDate().substring(0,2);
+        String day = getDepartureDate().substring(3,5);
         String year = getDepartureDate().substring(6,10);
 
         String departure = year + "-" + month + "-" + day;

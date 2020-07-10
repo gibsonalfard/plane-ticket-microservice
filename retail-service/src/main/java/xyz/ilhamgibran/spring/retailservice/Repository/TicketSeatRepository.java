@@ -9,7 +9,4 @@ import java.util.List;
 public interface TicketSeatRepository extends CrudRepository<TicketSeat, Integer> {
     @Query(value = "SELECT * FROM ticket_seat WHERE availability = 1", nativeQuery = true)
     public List<TicketSeat> getAvailableSeat();
-
-    @Query(value = "UPDATE from ticket_seat SET availability = 0 WHERE seat_id = ?1", nativeQuery = true)
-    public void takeSeat(int id);
 }
