@@ -71,7 +71,6 @@ public class OrderController {
                 ,input.getOrigin(),input.getDestination(), input.getFlightClass());
 
         if(ticket == null){
-
             System.out.println("Origin City is : " + origCity.getCityName());
             System.out.println("Destination City is : " + destCity.getCityName());
             System.out.println("Departure Date : " + input.getDepartureDateSQLFormat());
@@ -126,7 +125,7 @@ public class OrderController {
             ordersRepository.save(myOrder);
 
             // Save Order Ticket
-            List<TicketSeat> seat = ticketSeatRepository.getAvailableSeat(ticket.getTicketId());
+            List<TicketSeat> seat = ticketSeatRepository.getSeatByStatus(ticket.getTicketId(), 1);
             int idx = 0;
             for(String name : input.getPassagerName()){
                 orderTicketRepository.save(new OrderTicket(myOrder, seat.get(idx), name));
