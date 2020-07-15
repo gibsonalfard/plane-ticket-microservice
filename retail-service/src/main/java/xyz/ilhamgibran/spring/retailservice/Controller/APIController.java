@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -30,6 +32,11 @@ public class APIController {
     @Autowired
     private OrderTicketRepository orderTicketRepository;
 
+    @Autowired
+    private AsyncController asyncController;
+
+    private CompletableFuture thread;
+
     @RequestMapping(value = "/ticket/get", method = RequestMethod.GET)
     public Ticket giveTicket(@RequestParam int origin
             , @RequestParam int des
@@ -37,14 +44,23 @@ public class APIController {
             , @RequestParam String date
             , @RequestParam int passager){
         Ticket ticket = ticketRepository.searchStockAvailability(date, origin, des, flightClass, passager);
+        List<Integer> seatList = new ArrayList<>();
 
         if (ticket != null){
             List<TicketSeat> seat = ticketSeatRepository.getSeatByStatus(ticket.getTicketId(), 1);
             for(int i=0; i < passager; i++){
                 // System booking
                 seat.get(i).setAvailability(2);
+                seatList.add(seat.get(i).getSeatId());
                 ticketSeatRepository.save(seat.get(i));
             }
+        }
+
+        try {
+            thread = asyncController.wait10sec(seatList);
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         return ticket;
