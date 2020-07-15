@@ -2,11 +2,16 @@ package xyz.ilhamgibran.spring.retailservice.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import xyz.ilhamgibran.spring.retailservice.Model.Ticket;
-import xyz.ilhamgibran.spring.retailservice.Model.TicketSeat;
+import xyz.ilhamgibran.spring.retailservice.Model.*;
+import xyz.ilhamgibran.spring.retailservice.Repository.OrderTicketRepository;
+import xyz.ilhamgibran.spring.retailservice.Repository.OrdersRepository;
 import xyz.ilhamgibran.spring.retailservice.Repository.TicketRepository;
 import xyz.ilhamgibran.spring.retailservice.Repository.TicketSeatRepository;
 
+import java.sql.Date;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -18,6 +23,12 @@ public class APIController {
 
     @Autowired
     private TicketSeatRepository ticketSeatRepository;
+
+    @Autowired
+    private OrdersRepository ordersRepository;
+
+    @Autowired
+    private OrderTicketRepository orderTicketRepository;
 
     @RequestMapping(value = "/ticket/get", method = RequestMethod.GET)
     public Ticket giveTicket(@RequestParam int origin
@@ -40,12 +51,35 @@ public class APIController {
     }
 
     @RequestMapping(value = "/ticket/order", method = RequestMethod.POST)
-    public int orderTicket(@RequestBody int origin
-            , @RequestBody int destination
-            , @RequestBody int flight_class
-            , @RequestBody String date
-            , @RequestBody String[] passanger_name){
-        System.out.println("Passager Name Number 1 : " + passanger_name[0]);
+    public int orderTicket(@RequestBody RequestTicket input){
+        if(input != null){
+            System.out.println("Tanggal : " +  input.getDate());
+            System.out.println("Passager Name Number 1 : " + input.getPassagerName().get(0));
+
+            Ticket ticket = ticketRepository.searchAvailability(input.getDate()
+                    ,input.getOrigin(),input.getDestination(), input.getFlightClass());
+            double amount = input.getPassagerName().size()*ticket.getPrice();
+
+            // Save Order
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            java.sql.Date now = new Date(Calendar.getInstance().getTime().getTime());
+            Orders myOrder = new Orders(now, amount);
+            ordersRepository.save(myOrder);
+
+            List<TicketSeat> seat = ticketSeatRepository.getSeatByStatus(ticket.getTicketId(), 2);
+            int idx = 0;
+            for(String name : input.getPassagerName()){
+                orderTicketRepository.save(new OrderTicket(myOrder, seat.get(idx), name));
+                seat.get(idx).setAvailability(0);
+                ticketSeatRepository.save(seat.get(idx));
+                idx += 1;
+            }
+
+            ticket.setStock(ticket.getStock()-input.getPassagerName().size());
+            ticketRepository.save(ticket);
+        }else{
+            return 25;
+        }
         return 0;
     }
 }
