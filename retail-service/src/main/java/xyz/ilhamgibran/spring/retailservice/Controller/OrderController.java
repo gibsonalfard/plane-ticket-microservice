@@ -127,7 +127,16 @@ public class OrderController {
                         if(!comp.equals(InetAddress.getLocalHost().getHostName()+":"+port)){
                             fromNeig = restTemplate.getForObject(micro2URI +
                                     "/api/ticket/get"+params, Ticket.class);
+                            break;
                         }
+                    }
+
+                    if(fromNeig == null){
+                        model.addAttribute("input", new InputFormOrder());
+                        model.addAttribute("flightClass", seatClasses);
+                        model.addAttribute("city", cityList);
+                        model.addAttribute("status", "Data Not Found");
+                        return "index";
                     }
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
